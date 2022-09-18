@@ -1,0 +1,111 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "school--service",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/student": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Students"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "operationId": "listAll",
+        "summary": "students",
+        "description": "get all students"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Student": {
+        "title": "Root Type for Student",
+        "description": "school student",
+        "type": "object",
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": 1,
+          "name": "dummy"
+        }
+      },
+      "Error": {
+        "title": "Root Type for Error",
+        "description": "",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "message": "erro"
+        }
+      }
+    },
+    "responses": {
+      "Students": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Student"
+              }
+            },
+            "examples": {
+              "response": {
+                "value": [
+                  {
+                    "id": 6,
+                    "name": "some text"
+                  },
+                  {
+                    "id": 86,
+                    "name": "some text"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "Error": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "response": {
+                "value": {
+                  "message": "some text"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      }
+    }
+  }
+}
