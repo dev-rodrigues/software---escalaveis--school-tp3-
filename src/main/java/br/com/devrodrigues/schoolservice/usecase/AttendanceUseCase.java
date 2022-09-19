@@ -44,8 +44,11 @@ public class AttendanceUseCase {
                 if (Objects.equals(studant.getId(), attendance.getStudent().getId())) {
                     response.add(
                             new Attendance(
+                                    attendance.getId(),
                                     studant,
-                                    attendance.getStatus()
+                                    attendance.getStatus(),
+                                    attendance.getDate(),
+                                    attendance.getJustify()
                             )
                     );
                 }

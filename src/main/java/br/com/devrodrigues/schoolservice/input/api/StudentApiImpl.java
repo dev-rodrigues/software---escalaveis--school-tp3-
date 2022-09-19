@@ -25,7 +25,7 @@ public class StudentApiImpl implements StudentApi {
     }
 
     @Override
-    public ResponseEntity<List<Student>> listAll(String token) {
+    public ResponseEntity<List<Student>> listAll(String token, String function) {
         var result = listStudentsUseCase.getAll();
         var response  = result.stream().map(INSTANCE::fromStudentToStudent).collect(Collectors.toList());
         return ResponseEntity.ok(response);

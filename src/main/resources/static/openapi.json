@@ -16,6 +16,15 @@
             },
             "in": "header",
             "required": true
+          },
+          {
+            "name": "function",
+            "description": "function name",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
           }
         ],
         "responses": {
@@ -103,6 +112,15 @@
             },
             "in": "header",
             "required": true
+          },
+          {
+            "name": "function",
+            "description": "function name",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
           }
         ],
         "responses": {
@@ -119,21 +137,30 @@
       "get": {
         "parameters": [
           {
-            "name": "student",
-            "description": "student id",
-            "schema": {
-              "type": "integer"
-            },
-            "in": "query",
-            "required": true
-          },
-          {
             "name": "token",
             "description": "auth token",
             "schema": {
               "type": "string"
             },
             "in": "header",
+            "required": true
+          },
+          {
+            "name": "function",
+            "description": "function name",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "student",
+            "description": "student id",
+            "schema": {
+              "type": "integer"
+            },
+            "in": "query",
             "required": true
           }
         ],
@@ -154,6 +181,72 @@
         "summary": "get history attendance",
         "description": "get history attendance"
       }
+    },
+    "/attendance/justify/{attendance_id}": {
+      "summary": "justify if student MISSED or LATE",
+      "description": "justify if student MISSED or LATE",
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStudenty"
+              }
+            }
+          },
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "function",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "attendance_id",
+            "description": "attendance id",
+            "schema": {
+              "type": "integer"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/JustifyResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "attendance_id",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "components": {
@@ -206,7 +299,8 @@
         "description": "",
         "required": [
           "date",
-          "status"
+          "status",
+          "id"
         ],
         "type": "object",
         "properties": {
@@ -218,6 +312,10 @@
           "status": {
             "description": "",
             "type": "string"
+          },
+          "id": {
+            "description": "",
+            "type": "integer"
           }
         },
         "example": {
@@ -246,6 +344,42 @@
             ],
             "type": "string"
           }
+        }
+      },
+      "Justify": {
+        "description": "",
+        "required": [
+          "message",
+          "id",
+          "attendance"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "description": "",
+            "type": "string"
+          },
+          "id": {
+            "description": "",
+            "type": "integer"
+          },
+          "attendance": {
+            "description": "",
+            "type": "integer"
+          }
+        }
+      },
+      "CreateJustify": {
+        "title": "Root Type for CreateJustify",
+        "description": "",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "message": "qwe"
         }
       }
     },
@@ -351,6 +485,25 @@
                     "status": "some text"
                   }
                 ]
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "JustifyResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Justify"
+            },
+            "examples": {
+              "response": {
+                "value": {
+                  "message": "some text",
+                  "id": 0,
+                  "attendance": 76
+                }
               }
             }
           }

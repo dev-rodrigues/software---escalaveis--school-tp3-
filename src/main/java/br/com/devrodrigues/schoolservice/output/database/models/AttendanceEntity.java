@@ -1,7 +1,6 @@
 package br.com.devrodrigues.schoolservice.output.database.models;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 
 @Entity(name = "attendance")
@@ -21,11 +20,14 @@ public class AttendanceEntity {
 
     private String status;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "justify_id", referencedColumnName = "id")
+    private JustifyEntity justify;
+
     @PrePersist
     private void onCreate() {
         date = Calendar.getInstance();
     }
-
 
     public Integer getId() {
         return id;
@@ -57,5 +59,13 @@ public class AttendanceEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public JustifyEntity getJustify() {
+        return justify;
+    }
+
+    public void setJustify(JustifyEntity justify) {
+        this.justify = justify;
     }
 }
