@@ -7,6 +7,17 @@
   "paths": {
     "/student": {
       "get": {
+        "parameters": [
+          {
+            "name": "token",
+            "description": "auth token",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/Students"
@@ -24,6 +35,124 @@
         "operationId": "listAll",
         "summary": "students",
         "description": "get all students"
+      },
+      "post": {
+        "requestBody": {
+          "description": "studenty",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStudenty"
+              },
+              "examples": {
+                "request": {
+                  "value": {
+                    "name": "some text"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Student"
+          }
+        },
+        "operationId": "store",
+        "summary": "create an student",
+        "description": "create an student"
+      }
+    },
+    "/attendance": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CreateAttendance"
+                }
+              },
+              "examples": {
+                "request": {
+                  "value": [
+                    {
+                      "student": 17,
+                      "status": "late"
+                    },
+                    {
+                      "student": 46,
+                      "status": "late"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "description": "auth token",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/AttendanceResponse"
+          }
+        },
+        "operationId": "storeAttendance",
+        "summary": "create an attendance",
+        "description": "create an attendance"
+      }
+    },
+    "/report/attendance": {
+      "get": {
+        "parameters": [
+          {
+            "name": "student",
+            "description": "student id",
+            "schema": {
+              "type": "integer"
+            },
+            "in": "query",
+            "required": true
+          },
+          {
+            "name": "token",
+            "description": "auth token",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AttendanceStudent"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "summary": "get history attendance",
+        "description": "get history attendance"
       }
     }
   },
@@ -58,6 +187,65 @@
         },
         "example": {
           "message": "erro"
+        }
+      },
+      "CreateStudenty": {
+        "title": "Root Type for CreateStudenty",
+        "description": "",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "name": "dummy"
+        }
+      },
+      "Attendance": {
+        "description": "",
+        "required": [
+          "date",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "date": {
+            "format": "date-time",
+            "description": "",
+            "type": "string"
+          },
+          "status": {
+            "description": "",
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": 67,
+          "date": "2018-02-10T09:30Z"
+        }
+      },
+      "CreateAttendance": {
+        "description": "",
+        "required": [
+          "student",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "student": {
+            "description": "Student id",
+            "type": "integer"
+          },
+          "status": {
+            "description": "status",
+            "enum": [
+              "present",
+              "missed",
+              "late"
+            ],
+            "type": "string"
+          }
         }
       }
     },
@@ -100,6 +288,69 @@
                 "value": {
                   "message": "some text"
                 }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "Student": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Student"
+            },
+            "examples": {
+              "response": {
+                "value": {
+                  "id": 50,
+                  "name": "some text"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "AttendanceResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Attendance"
+            },
+            "examples": {
+              "response": {
+                "value": {
+                  "id": 27,
+                  "date": "2018-02-10T09:30Z"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "AttendanceStudent": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Attendance"
+              }
+            },
+            "examples": {
+              "response": {
+                "value": [
+                  {
+                    "date": "2018-02-10T09:30Z",
+                    "status": "some text"
+                  },
+                  {
+                    "date": "2018-02-10T09:30Z",
+                    "status": "some text"
+                  }
+                ]
               }
             }
           }
